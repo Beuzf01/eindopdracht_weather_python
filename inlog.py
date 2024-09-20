@@ -4,7 +4,6 @@ import os
 inlog_dict = {}
 
 
-
 def login():
     """gives the login menu"""
     print("." * 40)
@@ -12,8 +11,9 @@ def login():
     username = input("Enter your username: ")
     password = input("Enter your password: ")
 
-    login_check(username, password)
 
+    # login_check(username, password)
+    return login_check(username, password)
 
 
 def login_check(username, password):
@@ -23,10 +23,14 @@ def login_check(username, password):
             saved_password = file.read()
             if password == saved_password:
                 print(f"Welcome {username}!")
+                return True
             else:
                 print("password incorrect")
+                return False
     except FileNotFoundError:
         print("user not found")
+        return False
+
 
 def signup():
     """creates account based on the input given"""

@@ -4,15 +4,20 @@ from suntimes import *
 
 
 def main():
-    account_choice = input("Welcome! Do you:\n"
+    while True:
+        account_choice = input("Welcome! Do you:\n"
                            "1. Want to log in?\n"
                            "2. Want to sign up?\n"
-                           "3. Want to continue as guest?\n"
+                            "3. Want to continue as guest?\n"
                            "your choice: ")
-    while True:
+
         if account_choice == "1" or "log in" in account_choice:
-            login()
-            break
+            login_success = login()
+            if login_success:
+                break
+            else:
+                continue
+
         elif account_choice == "2" or "sign up" in account_choice:
             signup()
             break
