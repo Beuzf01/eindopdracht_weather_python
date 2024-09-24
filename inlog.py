@@ -1,7 +1,5 @@
 import os
 
-# maken inlogpage
-inlog_dict = {}
 
 
 def login():
@@ -11,8 +9,6 @@ def login():
     username = input("Enter your username: ")
     password = input("Enter your password: ")
 
-
-    # login_check(username, password)
     return login_check(username, password)
 
 

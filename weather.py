@@ -4,6 +4,7 @@ import requests
 from collections import defaultdict
 from datetime import datetime
 from dotenv import load_dotenv
+import time
 
 load_dotenv()
 API_KEY = os.getenv('API_KEY')
@@ -42,8 +43,9 @@ def locationprocessing(status, response_location):
             lon = locatie[0]["lon"]
             return lat, lon
     else:
-        print(f"Error getting location data: {response_location.status_code}")
+        print(f"Error getting location data: {status}")
         return None, None
+
 
 def weatherfetch(lat,lon):
         """gets the weather forecast based of the coordinates provided by the geo-API"""
@@ -82,7 +84,6 @@ def weatherprocessing(weather_status, response_weather, cnt, city):
                 'description': weather_desc
             })
 
-
         #getting data into a readable format and printing it
         for day, forecasts in daily_data.items():
                 # Calculate average temperature for the day
@@ -97,6 +98,7 @@ def weatherprocessing(weather_status, response_weather, cnt, city):
             print(f"Weather: {most_appearing_weather}")
             print('_' * 40)
             days_count += 1
+            time.sleep(0.5)
             if days_count >= cnt:
                 break
 

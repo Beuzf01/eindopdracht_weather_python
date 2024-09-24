@@ -29,50 +29,70 @@ def main():
             continue
 
     while True:
+        print("_"*40)
         weather_menu = input("How can we help you today?\n"
                              "1. Display weather forecast in a selected place for up to 5 days\n"
                              "2. Display sunrise and sunset times of the current day in a selected place\n"
-                             "3. Close the application\n"
                              "choice: ")
         if weather_menu == "1":
             city, cnt = usrinput()
             loc_status, location_data = locationfetch(city)
-            lat, lon = locationprocessing(loc_status, location_data)
-            if lat and lon:
-                weather_status, location_weather = weatherfetch(lat, lon)
-                weather_data = weatherprocessing(weather_status, location_weather, cnt, city)
-
+            try:
+                lat, lon = locationprocessing(loc_status, location_data)
+                if lat and lon:
+                    try:
+                        weather_status, location_weather = weatherfetch(lat, lon)
+                        weather_data = weatherprocessing(weather_status, location_weather, cnt, city)
+                    except Exception as e:
+                        print("Sorry, we have trouble finding the weather-forecast")
+                        print(e)
+                        continue
+            except Exception as e:
+                print("Sorry, we couldnt find the place you are looking for")
+                continue
 
         elif weather_menu == "2":
             print("_" * 40)
-            sun_city = input("which city would you like to know the sunrise and sunset of? ")
-            sun_lat, sun_lon = sun_locationfetch(sun_city)
-            if sun_lat and sun_lon:
-                sun_data = suntimes_fetch(sun_lat, sun_lon)
-            if sun_data:
+            city = input("which city would you like to know the sunrise and sunset of? ")
+            try:
+                loc_status, location_data = locationfetch(city)
+                lat, lon = locationprocessing(loc_status, location_data)
+                if lat and lon:
+                    sun_data = suntimes_fetch(lat, lon)
+                else:
+                    sun_data = None
+                if sun_data:
+                    try:
+                        print("_" * 40)
+                        sundata_processing(sun_data)
+                    except Exception as e:
+                        print("Sorry, we have trouble finding the sun-times")
+                        print(e)
+                        continue
                 print("_" * 40)
-                sunprocessing(sun_data)
-            print("_" * 40)
-        elif weather_menu == "3":
-            print("_" * 40)
-            print("have a great day!")
-            break
+            except Exception as e:
+                print("Sorry, we couldnt find the place you are looking for")
+                print (e)
+                continue
+
         else:
             print("We didnt quite understand, try again")
             continue
-        again = input("would you like to do something else? (y/n) ").strip()
-        if again.upper() == "Y":
-            print("_" * 40)
-            continue
-        if again.upper() == "N":
-            print("_" * 40)
-            print("have a nice day!")
-            print("_" * 40)
-            break
-        else:
-            print("_" * 40)
-            print("invalid input")
-            print("_" * 40)
+        while True:
+            again = input("would you like to do something else? (y/n) ").strip()
+            if again.upper() == "Y":
+                print("_" * 40)
+                break
+            if again.upper() == "N":
+                print("_" * 40)
+                print("have a nice day!")
+                print("_" * 40)
+                exit()
+            else:
+                print("_" * 40)
+                print("invalid input")
+                print("_" * 40)
+                continue
 
 
 if __name__ == '__main__':
