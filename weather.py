@@ -14,25 +14,25 @@ BASE_WEATHER_URL = "http://api.openweathermap.org/data/2.5"
 BASE_LOC_URL =  "http://api.openweathermap.org/geo/1.0"
 
 
-def usrinput():
+def userinput():
         """gets inport from user on where to get the weather from and the amount of days"""
         city = input("Which place would you like to know the weather forecast of? ").strip()
         try:
             cnt = int(input("For many days would you like to know the weather forecast? (max. 5) ").strip())
             if cnt > 5:
-                print("that is more than 5 days; you will now get the forecast for the coming 5 days.")
+                print("That is more than 5 days; you will now get the forecast for the coming 5 days.")
                 cnt = 5
             return city, cnt
         except ValueError:
             print("Please enter a number.")
-            return usrinput()
+            return userinput()
 
 def locationfetch(city):
     """gets the coordinates of the city the user put in"""
     response_location = requests.get(f"{BASE_LOC_URL}/direct?q={city}&limit=1&appid={API_KEY}")
     loc_status = response_location.status_code
     return loc_status, response_location
-def locationprocessing(status, response_location):
+def location_processing(status, response_location):
     """extracts the longitude and latitude of the location out of the API-response"""
     # Check if the request was successful
     if status == 200:
@@ -47,7 +47,7 @@ def locationprocessing(status, response_location):
         return None, None
 
 
-def weatherfetch(lat,lon):
+def weather_fetch(lat, lon):
         """gets the weather forecast based of the coordinates provided by the geo-API"""
         # Get weather data using latitude and longitude
         response_weather = requests.get(
@@ -56,7 +56,7 @@ def weatherfetch(lat,lon):
         weather_status = response_weather.status_code
         return weather_status, response_weather
 
-def weatherprocessing(weather_status, response_weather, cnt, city):
+def weather_processing(weather_status, response_weather, cnt, city):
     """extracts the data needed from the weather-API's response and prints it in a readable format"""
 
     if weather_status == 200:
