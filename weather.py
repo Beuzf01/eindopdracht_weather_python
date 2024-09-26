@@ -15,17 +15,17 @@ BASE_LOC_URL =  "http://api.openweathermap.org/geo/1.0"
 
 
 def userinput():
-        """gets inport from user on where to get the weather from and the amount of days"""
-        city = input("Which place would you like to know the weather forecast of? ").strip()
-        try:
-            cnt = int(input("For many days would you like to know the weather forecast? (max. 5) ").strip())
-            if cnt > 5:
-                print("That is more than 5 days; you will now get the forecast for the coming 5 days.")
-                cnt = 5
-            return city, cnt
-        except ValueError:
-            print("Please enter a number.")
-            return userinput()
+    """gets inport from user on where to get the weather from and the amount of days"""
+    city = input("Which place would you like to know the weather forecast of? ").strip()
+    try:
+        cnt = int(input("For many days would you like to know the weather forecast? (max. 5) ").strip())
+        if cnt > 5:
+            print("That is more than 5 days; you will now get the forecast for the coming 5 days.")
+            cnt = 5
+        return city, cnt
+    except ValueError:
+        print("Please enter a number.")
+        return userinput()
 
 def locationfetch(city):
     """gets the coordinates of the city the user put in"""
@@ -48,13 +48,13 @@ def location_processing(status, response_location):
 
 
 def weather_fetch(lat, lon):
-        """gets the weather forecast based of the coordinates provided by the geo-API"""
-        # Get weather data using latitude and longitude
-        response_weather = requests.get(
+    """gets the weather forecast based of the coordinates provided by the geo-API"""
+    # Get weather data using latitude and longitude
+    response_weather = requests.get(
         f"{BASE_WEATHER_URL}/forecast?lat={lat}&lon={lon}&appid={API_KEY}&units=metric"
         )
-        weather_status = response_weather.status_code
-        return weather_status, response_weather
+    weather_status = response_weather.status_code
+    return weather_status, response_weather
 
 def weather_processing(weather_status, response_weather, cnt, city):
     """extracts the data needed from the weather-API's response and prints it in a readable format"""
@@ -74,20 +74,24 @@ def weather_processing(weather_status, response_weather, cnt, city):
             forecast_time = datetime.fromtimestamp(forecast['dt'])
             date_str = forecast_time.date()
 
-            # Collect the temperature and weather description
+            # Collect the temperature, weather description, and humidity
             temp = forecast['main']['temp']
             weather_desc = forecast['weather'][0]['description']
+            humidity = forecast['main']['humidity']
 
+            # save the found data in a dictionary with the date as key
             daily_data[date_str].append({
                 'time': forecast_time,
                 'temp': temp,
-                'description': weather_desc
+                'description': weather_desc,
+                'humidity': humidity
             })
 
-        #getting data into a readable format and printing it
+        # grouping data per day, convert it into a readable format and printing it
         for day, forecasts in daily_data.items():
-                # Calculate average temperature for the day
+            # Calculate average temperature for the day
             avg_temp = sum([f['temp'] for f in forecasts]) / len(forecasts)
+            avg_hum = sum([f['humidity'] for f in forecasts]) / len(forecasts)
 
             # Get the most common weather description for the day
             most_appearing_weather = max(set([f['description'] for f in forecasts]), key=[f['description'] for f in forecasts].count)
@@ -96,17 +100,18 @@ def weather_processing(weather_status, response_weather, cnt, city):
             print(f"Date: {day.strftime('%d/%m/%Y')}")
             print(f"Average Temp: {avg_temp:.1f}°C")
             print(f"Weather: {most_appearing_weather}")
+            print(f"Humidity: {avg_hum:.1f}%")
             print('_' * 40)
             days_count += 1
             time.sleep(0.5)
             if days_count >= cnt:
                 break
 
-
+        return weather_data, city
 
     else:
         print(f"Error getting weather data: {response_weather.status_code}")
-    return weather_data, city
+        return None, None
 
 
 

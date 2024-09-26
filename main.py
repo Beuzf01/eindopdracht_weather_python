@@ -1,4 +1,4 @@
-from inlog import *
+from login import *
 from weather import *
 from suntimes import *
 
@@ -35,6 +35,7 @@ def main():
                              "2. Display sunrise and sunset times of the current day in a selected place\n"
                              "Choice: ")
         if weather_menu == "1":
+            # getting input from user and processing the city into coördinates using geo-API
             city, cnt = userinput()
             loc_status, location_data = locationfetch(city)
             try:
@@ -47,7 +48,7 @@ def main():
                         print("Sorry, we have trouble finding the weather-forecast")
                         continue
             except Exception as e:
-                print("Sorry, we could'nt find the place you are looking for")
+                print("Sorry, we couldn't find the place you are looking for")
                 continue
 
         elif weather_menu == "2":
@@ -69,7 +70,7 @@ def main():
                         continue
                 print("_" * 40)
             except Exception as e:
-                print("Sorry, we couldnt find the place you are looking for")
+                print("Sorry, we couldn't find the place you are looking for")
                 continue
 
         else:
@@ -77,10 +78,10 @@ def main():
             continue
         while True:
             again = input("Would you like to do something else? (y/n) ").strip()
-            if again.upper() == "Y":
+            if again.upper() == "Y" or again.upper() == "YES":
                 print("_" * 40)
                 break
-            if again.upper() == "N":
+            if again.upper() == "N" or again.upper() == "NO":
                 print("_" * 40)
                 print("Have a nice day!")
                 print("_" * 40)
