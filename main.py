@@ -5,12 +5,14 @@ from suntimes import *
 
 def main():
     while True:
+        # asking the user how they want to continue
         account_choice = input("Welcome! Do you:\n"
                            "1. Want to log in?\n"
                            "2. Want to sign up?\n"
                             "3. Want to continue as guest?\n"
                            "Your choice: ")
 
+        # processing the input and asking the user to perform the according actions
         if account_choice == "1" or "log in" in account_choice:
             login_success = login()
             if login_success:
@@ -41,6 +43,7 @@ def main():
             try:
                 lat, lon = location_processing(loc_status, location_data)
                 if lat and lon:
+                    # using found coördinates to fetch the weather in that place and give the user output
                     try:
                         weather_status, location_weather = weather_fetch(lat, lon)
                         weather_data = weather_processing(weather_status, location_weather, cnt, city)
@@ -76,6 +79,7 @@ def main():
         else:
             print("We didnt quite understand, try again")
             continue
+        # asking the user whether they want to use the application again
         while True:
             again = input("Would you like to do something else? (y/n) ").strip()
             if again.upper() == "Y" or again.upper() == "YES":

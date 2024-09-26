@@ -15,6 +15,7 @@ def login():
 def login_check(username, password):
     """checks the input given in the login function"""
     try:
+        # check whether there is a file with the correct name and whether its containing the right password
         with open(os.path.join("accounts",f"{username}.txt"), "r") as file:
             saved_password = file.read()
             if password == saved_password:
@@ -41,6 +42,8 @@ def signup():
 
 def acc_save(new_user, new_password):
     """saves the account created in the signup function"""
+    # create folder "accounts" if not already existent
+    # save account as username.txt containing password
     folder_name = "accounts"
     if not os.path.exists(folder_name):
         os.makedirs(folder_name)
