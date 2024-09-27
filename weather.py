@@ -18,11 +18,11 @@ def userinput():
     """gets inport from user on where to get the weather from and the amount of days"""
     city = input("Which place would you like to know the weather forecast of? ").strip()
     try:
-        cnt = int(input("For many days would you like to know the weather forecast? (max. 5) ").strip())
-        if cnt > 5:
+        amount_days = int(input("For many days would you like to know the weather forecast? (max. 5) ").strip())
+        if amount_days > 5:
             print("That is more than 5 days; you will now get the forecast for the coming 5 days.")
-            cnt = 5
-        return city, cnt
+            amount_days = 5
+        return city, amount_days
     except ValueError:
         print("Please enter a number.")
         return userinput()
