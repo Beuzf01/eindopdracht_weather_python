@@ -36,7 +36,7 @@ def main():
                              "1. Display weather forecast in a selected place for up to 5 days\n"
                              "2. Display sunrise and sunset times of the current day in a selected place\n"
                              "Choice: ")
-        if weather_menu == "1":
+        if weather_menu == "1" or "forecast" in weather_menu:
             # getting input from user and processing the city into coördinates using geo-API
             city, cnt = userinput()
             loc_status, location_data = locationfetch(city)
@@ -54,7 +54,7 @@ def main():
                 print("Sorry, we couldn't find the place you are looking for")
                 continue
 
-        elif weather_menu == "2":
+        elif weather_menu == "2" or "sun" in weather_menu:
             print("_" * 40)
             city = input("Which city would you like to know the sunrise and sunset of? ")
             try:
